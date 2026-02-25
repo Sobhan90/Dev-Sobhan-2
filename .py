@@ -6,16 +6,14 @@ import time
 import threading
 import sys
 
-# تنظیمات
-PASSWORD_LENGTH = 2  # طول رمز اصلی (۵۰ خیلی سخته حدس بزنی!)
+PASSWORD_LENGTH = 2  
 MAX_WRONG = 3
-LOCK_MINUTES = 60  # ۱ ساعت → برای تست سریع 1 یا 2 بذار
-MASTER_PASSWORD = "sos1234"  # رمز نجات اضطراری - حتما عوض کن!
+LOCK_MINUTES = 60  
+MASTER_PASSWORD = "استاد با مرام"  
 
 chars = string.ascii_letters + string.digits + string.punctuation
 secret = "".join(random.choices(chars, k=PASSWORD_LENGTH))
 
-# print("رمز (تست):", secret)     # ← موقع تست باز کن - بعد کامنت کن
 
 lock_end = 0
 wrong_count = 0
@@ -39,7 +37,7 @@ def check_guess(event=None):
         sys.exit(0)
 
     if guess == MASTER_PASSWORD:
-        if lock_end - now > 1800:  # بیشتر از ۳۰ دقیقه مونده
+        if lock_end - now > 1800:  
             messagebox.showinfo("نجات!", "رمز اضطراری قبول شد!")
             root.destroy()
             sys.exit(0)
@@ -83,31 +81,28 @@ def timer_thread():
         pass
 
 
-# ────────────────────────────────
-# اضافه شده: کپی رمز با کلیک روی نقطه مخفی
-# ────────────────────────────────
 def copy_secret_to_clipboard(event=None):
     root.clipboard_clear()
     root.clipboard_append(secret)
-    root.update()  # اطمینان از کپی شدن
+    root.update()  
     old_text = status.cget("text")
     old_fg = status.cget("fg")
     status.config(text="رمز کپی شد (در کلیپ‌بورد)", fg="#00ff88")
     root.after(3500, lambda: status.config(text=old_text, fg=old_fg))
 
 
-# پنجره اصلی
+
 root = tk.Tk()
 root.title("سیستم قفل شده")
 root.attributes("-fullscreen", True)
 root.attributes("-topmost", True)
 root.configure(bg="#0d1117")
 
-# سعی در بلاک کردن خروج
-root.overrideredirect(True)  # بدون حاشیه و عنوان
+
+root.overrideredirect(True)  
 root.bind("<Alt-F4>", lambda e: "break")
 root.bind("<Escape>", lambda e: "break")
-root.bind("<Control-Alt-Delete>", lambda e: "break")  # کار نمی‌کنه واقعاً
+root.bind("<Control-Alt-Delete>", lambda e: "break")  
 root.bind("<Control-q>", lambda e: "break")
 
 frame = tk.Frame(root, bg="#161b22", bd=0)
@@ -163,12 +158,11 @@ tk.Label(
 
 entry.bind("<Return>", check_guess)
 
-# نقطه تقریباً نامرئی در گوشه پایین راست برای کپی رمز
 trigger = tk.Label(
     root,
     text=".",
     bg="#0d1117",
-    fg="#0d1117",  # رنگ متن هم با پس‌زمینه یکی
+    fg="#0d1117",  
     font=("Arial", 1),
     cursor="hand2",
 )
